@@ -27,4 +27,5 @@ model resultado {
 enum rol_enum {
   ESTUDIANTE
   PROFESOR
+  ADMINISTRADOR
 }

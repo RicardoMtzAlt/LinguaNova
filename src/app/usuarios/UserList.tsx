@@ -45,42 +45,57 @@ export default function UserList({ usuarios }: Props) {
   }
 
   return (
-    <div>
-      <ul className="mt-4 space-y-2">
+    <div className="p-6 max-w-4xl mx-auto">
+
+      <ul className="space-y-4">
         {usuarios.map((usuario) => (
-          <li key={usuario.id} className="border p-2 rounded">
-            <p>
-              <strong>{usuario.nombre}</strong> ({usuario.rol})
-            </p>
-            <p>{usuario.correo}</p>
-            <div className="mt-2 flex gap-4">
-              <Link href={`/usuarios/editar/${usuario.id}`} className="text-green-500 hover:underline">
-                Editar
-              </Link>
-              <button
-                className="text-red-500 hover:underline cursor-pointer"
-                onClick={() => confirmarEliminacion(usuario.id, usuario.nombre)}
-              >
-                Eliminar
-              </button>
+          <li
+            key={usuario.id}
+            className="bg-white border border-gray-200 rounded-xl shadow p-6 hover:shadow-md transition"
+          >
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center">
+              <div>
+                <p className="text-lg font-semibold text-gray-800">{usuario.nombre}</p>
+                <p className="text-sm text-gray-600">{usuario.correo}</p>
+                <p className="text-xs text-gray-500 mt-1">Rol: {usuario.rol}</p>
+              </div>
+              <div className="mt-4 sm:mt-0 flex gap-4">
+                <Link
+                  href={`/usuarios/editar/${usuario.id}`}
+                  className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded text-sm shadow"
+                >
+                  Editar
+                </Link>
+                <button
+                  onClick={() => confirmarEliminacion(usuario.id, usuario.nombre)}
+                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded text-sm shadow"
+                >
+                  Eliminar
+                </button>
+              </div>
             </div>
           </li>
         ))}
       </ul>
+
+      {/* Modal de confirmación */}
       {idParaEliminar !== null && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded shadow-lg text-center">
-            <p className="mb-4">¿Estás seguro que deseas eliminar a <strong>{nombreParaEliminar}</strong>?</p>
+          <div className="bg-white w-full max-w-md p-6 rounded-xl shadow-lg text-center">
+            <h2 className="text-xl font-semibold mb-4 text-red-600">Confirmar eliminación</h2>
+            <p className="mb-6 text-gray-800">
+              ¿Estás seguro que deseas eliminar a <strong>{nombreParaEliminar}</strong>?
+            </p>
             <div className="flex justify-center gap-4">
               <button
                 onClick={eliminarUsuario}
-                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded shadow"
               >
                 Sí, eliminar
               </button>
               <button
                 onClick={cancelar}
-                className="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400"
+                className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded shadow"
               >
                 Cancelar
               </button>

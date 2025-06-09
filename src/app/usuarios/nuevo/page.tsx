@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export default function NuevoUsuarioPage() {
@@ -10,6 +10,7 @@ export default function NuevoUsuarioPage() {
   const [rol, setRol] = useState("ESTUDIANTE");
   const [contrasena, setcontrasena] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false); // estado para éxito
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,57 +22,80 @@ export default function NuevoUsuarioPage() {
     });
 
     if (res.ok) {
-      router.push("/usuarios");
+      setSuccess(true); // Mostrar mensaje de éxito
+      setError("");
+      // Esperar 2 segundos antes de redirigir
+      setTimeout(() => {
+        router.push("/usuarios");
+      }, 2000);
     } else {
       const data = await res.json();
       setError(data.message || "Error al crear usuario");
+      setSuccess(false);
     }
   };
 
   return (
-    <div className="p-4 max-w-md mx-auto">
-      <h1 className="text-xl font-bold mb-4">Nuevo Usuario</h1>
-      {error && <p className="text-red-500 mb-2">{error}</p>}
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="text"
-          placeholder="Nombre"
-          value={nombre}
-          onChange={(e) => setNombre(e.target.value)}
-          className="border p-2 w-full rounded"
-          required
-        />
-        <input
-          type="email"
-          placeholder="Correo"
-          value={correo}
-          onChange={(e) => setCorreo(e.target.value)}
-          className="border p-2 w-full rounded"
-          required
-        />
-        <select
-          value={rol}
-          onChange={(e) => setRol(e.target.value)}
-          className="border p-2 w-full rounded"
-        >
-          <option value="ESTUDIANTE">Estudiante</option>
-          <option value="PROFESOR">Profesor</option>
-        </select>
-        <input
-          type="password"
-          placeholder="contrasena"
-          value={contrasena}
-          onChange={(e) => setcontrasena(e.target.value)}
-          className="border p-2 w-full rounded"
-          required
-        />
-        <button
-          type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded"
-        >
-          Crear Usuario
-        </button>
-      </form>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+      <div className="bg-white shadow-lg rounded-lg p-10 w-full max-w-xl">
+        <h1 className="text-4xl font-bold mb-8 text-center text-blue-700">Crear Nuevo Usuario</h1>
+
+        {error && (
+          <p className="text-red-600 bg-red-100 border border-red-300 rounded p-4 mb-5 text-lg font-semibold">
+            {error}
+          </p>
+        )}
+
+        {success && (
+          <p className="text-green-700 bg-green-100 border border-green-300 rounded p-4 mb-5 text-lg font-semibold text-center">
+            Usuario creado exitosamente. Redirigiendo...
+          </p>
+        )}
+
+        {!success && (
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <input
+              type="text"
+              placeholder="Nombre"
+              value={nombre}
+              onChange={(e) => setNombre(e.target.value)}
+              className="border border-gray-300 p-4 w-full rounded text-2xl font-medium text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              required
+            />
+            <input
+              type="email"
+              placeholder="Correo"
+              value={correo}
+              onChange={(e) => setCorreo(e.target.value)}
+              className="border border-gray-300 p-4 w-full rounded text-2xl font-medium text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              required
+            />
+            <select
+              value={rol}
+              onChange={(e) => setRol(e.target.value)}
+              className="border border-gray-300 p-4 w-full rounded text-2xl font-medium text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            >
+              <option value="ESTUDIANTE">Estudiante</option>
+              <option value="PROFESOR">Profesor</option>
+              <option value="ADMINISTRADOR">Administrador</option>
+            </select>
+            <input
+              type="password"
+              placeholder="Contraseña"
+              value={contrasena}
+              onChange={(e) => setcontrasena(e.target.value)}
+              className="border border-gray-300 p-4 w-full rounded text-2xl font-medium text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              required
+            />
+            <button
+              type="submit"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 text-2xl rounded shadow-md transition duration-300"
+            >
+              Crear Usuario
+            </button>
+          </form>
+        )}
+      </div>
     </div>
   );
 }
