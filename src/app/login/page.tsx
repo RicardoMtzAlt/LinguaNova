@@ -127,7 +127,7 @@ export default function LoginPage() {
                   id="correo"
                   type="email"
                   className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-gray-800 placeholder-gray-400" 
-                  placeholder="tu@correo.com"
+                  placeholder="correo@gmail.com"
                   value={correo}
                   onChange={(e) => setCorreo(e.target.value)}
                   onKeyPress={handleKeyPress}

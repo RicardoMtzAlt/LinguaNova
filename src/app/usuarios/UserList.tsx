@@ -80,8 +80,9 @@ export default function UserList({ usuarios }: Props) {
 
       {/* Modal de confirmación */}
       {idParaEliminar !== null && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white w-full max-w-md p-6 rounded-xl shadow-lg text-center">
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-indigo-100 opacity-95"></div>
+          <div className="relative bg-white w-full max-w-md p-6 rounded-xl shadow-lg text-center z-10">
             <h2 className="text-xl font-semibold mb-4 text-red-600">Confirmar eliminación</h2>
             <p className="mb-6 text-gray-800">
               ¿Estás seguro que deseas eliminar a <strong>{nombreParaEliminar}</strong>?
