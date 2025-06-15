@@ -1,18 +1,17 @@
 'use client'
 
 import { useState } from 'react'
-import { usuario } from '@prisma/client'
+import { usuarios } from '@prisma/client'
 import { useRouter } from 'next/navigation'
 
 type Props = {
-  usuario: usuario
+  usuario: usuarios
 }
 
 export default function FormularioUsuario({ usuario }: Props) {
   const router = useRouter()
   const [nombre, setNombre] = useState(usuario.nombre)
   const [correo, setCorreo] = useState(usuario.correo)
-  const [rol, setRol] = useState(usuario.rol)
   const [contrasena, setcontrasena] = useState('')
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
@@ -23,21 +22,23 @@ export default function FormularioUsuario({ usuario }: Props) {
     const body = {
       nombre,
       correo,
-      rol,
-      contrasena
+      contrasena,
     }
 
     const res = await fetch(`/api/usuarios/${usuario.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
+      body: JSON.stringify(body),
     })
 
     if (res.ok) {
       setError('')
       setSuccess(true)
-      setTimeout(() => {
-        router.push('/usuarios')
+
+      
+      setTimeout(async () => {
+        await fetch('/api/logout') 
+        router.push('/login')
       }, 2000)
     } else {
       const data = await res.json()
@@ -50,7 +51,7 @@ export default function FormularioUsuario({ usuario }: Props) {
     <div className="max-w-md mx-auto mt-6 bg-white p-6 rounded-lg shadow-md">
       {success && (
         <div className="bg-green-100 text-green-800 text-center p-4 rounded font-semibold text-lg">
-          ✅ Usuario actualizado con éxito. Redirigiendo...
+          ✅ Usuario actualizado. Cerrando sesión para aplicar cambios...
         </div>
       )}
 
@@ -68,7 +69,6 @@ export default function FormularioUsuario({ usuario }: Props) {
               type="text"
               value={nombre}
               onChange={e => setNombre(e.target.value)}
-              placeholder="Nombre"
               className="border border-gray-300 text-gray-500 p-3 w-full rounded shadow-sm text-lg focus:outline-blue-500"
               required
             />
@@ -80,22 +80,9 @@ export default function FormularioUsuario({ usuario }: Props) {
               type="email"
               value={correo}
               onChange={e => setCorreo(e.target.value)}
-              placeholder="Correo"
-              className="border border-gray-300 text-gray-500  p-3 w-full rounded shadow-sm text-lg focus:outline-blue-500"
+              className="border border-gray-300 text-gray-500 p-3 w-full rounded shadow-sm text-lg focus:outline-blue-500"
               required
             />
-          </div>
-
-          <div>
-            <label className="block mb-1 font-medium text-gray-700 text-lg">Rol</label>
-            <select
-              value={rol}
-              onChange={e => setRol(e.target.value as usuario['rol'])}
-              className="border border-gray-300 text-gray-500  p-3 w-full rounded shadow-sm text-lg focus:outline-blue-500"
-            >
-              <option value="ESTUDIANTE">Estudiante</option>
-              <option value="PROFESOR">Profesor</option>
-            </select>
           </div>
 
           <div>

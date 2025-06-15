@@ -4,17 +4,28 @@ import prisma from "@/app/lib/prisma";
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { nombre, correo, rol, contrasena } = body;
+    const { nombre, correo, contrasena } = body;
 
-    if (!nombre || !correo || !rol || !contrasena) {
+    if (!nombre || !correo || !contrasena) {
       return NextResponse.json(
         { message: "Faltan campos requeridos." },
         { status: 400 }
       );
     }
 
-    const nuevoUsuario = await prisma.usuario.create({
-      data: { nombre, correo, rol, contrasena },
+    const usuarioExistente = await prisma.usuarios.findUnique({
+      where: { correo }
+    });
+
+    if (usuarioExistente) {
+      return NextResponse.json(
+        { message: "El correo ya está registrado." },
+        { status: 400 }
+      );
+    }
+
+    const nuevoUsuario = await prisma.usuarios.create({
+      data: { nombre, correo, contrasena },
     });
 
     return NextResponse.json(nuevoUsuario, { status: 201 });

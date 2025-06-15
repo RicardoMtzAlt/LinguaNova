@@ -2,8 +2,8 @@ import prisma from '@/app/lib/prisma'
 import Resultados from './Calificaciones'
 
 export default async function UsuariosPage() {
-  const usuarios = await prisma.usuario.findMany()
-  const resultados = await prisma.resultado.findMany()
+  const usuarios = await prisma.usuarios.findMany()
+  const resultados = await prisma.resultados.findMany()
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">

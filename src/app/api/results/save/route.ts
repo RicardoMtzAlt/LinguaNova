@@ -1,26 +1,31 @@
-import { NextResponse } from 'next/server';
-import { prisma } from '@/app/lib/prisma';
+import { NextResponse } from 'next/server'
+import prisma from '@/app/lib/prisma'
 
 export async function POST(request: Request) {
   try {
-    const { topic, score, userId } = await request.json();
+    const { topic, score, userId } = await request.json()
 
     if (!topic || score === undefined || !userId) {
-      return NextResponse.json({ message: 'Tema, puntuación y ID de usuario son requeridos' }, { status: 400 });
+      return NextResponse.json(
+        { message: 'Tema, puntuación y ID de usuario son requeridos' },
+        { status: 400 }
+      )
     }
 
-    const newResult = await prisma.resultado.create({
+    const newResult = await prisma.resultados.create({
       data: {
-        titulo_examen: topic,
+        idioma: topic,
         calificacion: score,
-        estudiante_id: Number(userId),
+        usuarioid: Number(userId),
       },
-    });
+    })
 
-    return NextResponse.json(newResult, { status: 201 });
-
+    return NextResponse.json(newResult, { status: 201 })
   } catch (error) {
-    console.error("Error al guardar el resultado:", error);
-    return NextResponse.json({ message: 'Error al guardar el resultado' }, { status: 500 });
+    console.error('Error al guardar el resultado:', error)
+    return NextResponse.json(
+      { message: 'Error al guardar el resultado' },
+      { status: 500 }
+    )
   }
 }

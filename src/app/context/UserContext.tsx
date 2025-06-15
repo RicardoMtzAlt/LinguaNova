@@ -1,60 +1,67 @@
-'use client';
+'use client'
 
-import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
+import React, {
+  createContext,
+  useState,
+  useContext,
+  useEffect,
+  ReactNode,
+} from 'react'
 
 interface User {
-  id: number;
-  rol: 'ESTUDIANTE' | 'PROFESOR';
+  id: number
+  nombre: string
+  correo: string
 }
 
 interface UserContextType {
-  user: User | null;
-  login: (userData: User) => void;
-  logout: () => void;
-  isLoading: boolean;
+  user: User | null
+  login: (userData: User) => void
+  logout: () => void
+  isLoading: boolean
 }
 
-const UserContext = createContext<UserContextType | undefined>(undefined);
+const UserContext = createContext<UserContextType | undefined>(undefined)
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState<User | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     try {
-      const storedUser = localStorage.getItem('currentUser');
+      const storedUser = localStorage.getItem('currentUser')
       if (storedUser) {
-        setUser(JSON.parse(storedUser));
+        setUser(JSON.parse(storedUser))
       }
     } catch (error) {
-      console.error("Error al leer localStorage", error);
-      localStorage.removeItem('currentUser');
+      console.error('Error al leer localStorage', error)
+      localStorage.removeItem('currentUser')
     } finally {
-        setIsLoading(false);
+      setIsLoading(false)
     }
-  }, []);
+  }, [])
 
   const login = (userData: User) => {
-    localStorage.setItem('currentUser', JSON.stringify(userData));
-    setUser(userData);
-  };
+    localStorage.setItem('currentUser', JSON.stringify(userData))
+    setUser(userData)
+  }
 
   const logout = () => {
-    localStorage.removeItem('currentUser');
-    setUser(null);
-  };
+    localStorage.removeItem('currentUser')
+    setUser(null)
+  }
 
   return (
     <UserContext.Provider value={{ user, login, logout, isLoading }}>
       {children}
     </UserContext.Provider>
-  );
-};
+  )
+}
 
 export const useUser = () => {
-  const context = useContext(UserContext);
+  const context = useContext(UserContext)
   if (context === undefined) {
-    throw new Error('useUser debe ser usado dentro de un UserProvider');
+    throw new Error('useUser debe ser usado dentro de un UserProvider')
   }
-  return context;
-};
+  return context
+}

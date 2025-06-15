@@ -8,16 +8,14 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: 'El tema es requerido' }, { status: 400 });
     }
 
-    // --- NUEVO PROMPT PARA PREGUNTAS ABIERTAS ---
     const prompt = `
-      Genera 10 preguntas de conocimiento abiertas y concisas sobre el tema "${topic}".
+      Genera 10 preguntas de conocimiento abiertas y concisas sobre el idioma "${topic}" en este idioma.
       Las preguntas deben requerir una respuesta corta y específica.
       Devuelve la respuesta EXCLUSIVAMENTE en formato de array de strings JSON.
-      Ejemplo para el tema "Sistema Solar":
-      ["¿Cuál es el planeta más grande del Sistema Solar?", "¿Qué planeta es conocido como el 'Planeta Rojo'?"]
+      Ejemplo para el tema "Ingles":
+      ["How do you write "altura" in english?"]
       No incluyas nada más en tu respuesta, solo el array JSON.
     `;
-    // --- FIN DEL NUEVO PROMPT ---
 
     const result = await model.generateContent(prompt);
     let responseText = await result.response.text();

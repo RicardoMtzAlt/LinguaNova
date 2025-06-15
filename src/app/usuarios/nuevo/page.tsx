@@ -1,16 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function NuevoUsuarioPage() {
   const router = useRouter();
   const [nombre, setNombre] = useState("");
   const [correo, setCorreo] = useState("");
-  const [rol, setRol] = useState("ESTUDIANTE");
   const [contrasena, setcontrasena] = useState("");
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false); // estado para éxito
+  const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,15 +17,14 @@ export default function NuevoUsuarioPage() {
     const res = await fetch("/api/usuarios", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nombre, correo, rol, contrasena }),
+      body: JSON.stringify({ nombre, correo, contrasena }),
     });
 
     if (res.ok) {
-      setSuccess(true); // Mostrar mensaje de éxito
+      setSuccess(true);
       setError("");
-      // Esperar 2 segundos antes de redirigir
       setTimeout(() => {
-        router.push("/usuarios");
+        router.push("/login");
       }, 2000);
     } else {
       const data = await res.json();
@@ -38,7 +36,7 @@ export default function NuevoUsuarioPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
       <div className="bg-white shadow-lg rounded-lg p-10 w-full max-w-xl">
-        <h1 className="text-4xl font-bold mb-8 text-center text-blue-700">Crear Nuevo Usuario</h1>
+        <h1 className="text-4xl font-bold mb-8 text-center text-blue-700">Crear Cuenta</h1>
 
         {error && (
           <p className="text-red-600 bg-red-100 border border-red-300 rounded p-4 mb-5 text-lg font-semibold">
@@ -70,15 +68,6 @@ export default function NuevoUsuarioPage() {
               className="border border-gray-300 p-4 w-full rounded text-2xl font-medium text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
               required
             />
-            <select
-              value={rol}
-              onChange={(e) => setRol(e.target.value)}
-              className="border border-gray-300 p-4 w-full rounded text-2xl font-medium text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            >
-              <option value="ESTUDIANTE">Estudiante</option>
-              <option value="PROFESOR">Profesor</option>
-              <option value="ADMINISTRADOR">Administrador</option>
-            </select>
             <input
               type="password"
               placeholder="Contraseña"
@@ -91,7 +80,7 @@ export default function NuevoUsuarioPage() {
               type="submit"
               className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 text-2xl rounded shadow-md transition duration-300"
             >
-              Crear Usuario
+              Crear Cuenta
             </button>
           </form>
         )}

@@ -9,14 +9,13 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: 'Se requiere la pregunta y la respuesta' }, { status: 400 });
     }
 
-    // --- PROMPT PARA EVALUAR LA RESPUESTA ---
     const prompt = `
       Evalúa si la respuesta del usuario es correcta para la siguiente pregunta.
       Pregunta: "${question}"
       Respuesta del usuario: "${answer}"
 
       Considera sinónimos y variaciones menores, pero sé estricto con el concepto principal.
-      Tu respuesta debe ser EXCLUSIVAMENTE un objeto JSON con la siguiente estructura:
+      Tu respuesta debe ser EXCLUSIVAMENTE un objeto JSON con la siguiente estructura y debe ser en el idioma de la pregunta:
       {
         "isCorrect": boolean,
         "explanation": "Una breve explicación de por qué la respuesta es correcta o incorrecta. Si es incorrecta, menciona cuál sería la respuesta correcta."
@@ -32,7 +31,6 @@ export async function POST(request: Request) {
         "explanation": "Incorrecto. La respuesta correcta es Júpiter. Marte es conocido como el 'Planeta Rojo'."
       }
     `;
-    // --- FIN DEL PROMPT DE EVALUACIÓN ---
     
     const result = await model.generateContent(prompt);
     let responseText = await result.response.text();

@@ -1,21 +1,19 @@
 'use client'
 
 import Link from 'next/link'
-import { useParams } from 'next/navigation'
-import { usuario, resultado } from '@prisma/client'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
+import { usuarios, resultados } from '@prisma/client'
 
 type Props = {
-  usuarios: usuario[]
-  resultados: resultado[]
+  usuarios: usuarios[]
+  resultados: resultados[]
 }
 
 export default function Resultados({ usuarios, resultados }: Props) {
-
   const { id } = useParams<{ id: string }>()
   const estudianteId = parseInt(id)
-  const estudiante = usuarios.find(u => u.id === estudianteId && u.rol === "ESTUDIANTE")
-  const resultadosEstudiante = resultados.filter(r => r.estudiante_id === estudianteId)
+  const estudiante = usuarios.find(u => u.id === estudianteId)
+  const resultadosEstudiante = resultados.filter(r => r.usuarioid === estudianteId)
 
   const router = useRouter()
 
@@ -28,7 +26,7 @@ export default function Resultados({ usuarios, resultados }: Props) {
       <div className="p-6 max-w-3xl mx-auto">
         <h1 className="text-3xl font-bold mb-6 text-center text-blue-700">Resultados</h1>
         <div className="bg-white rounded-2xl shadow-lg p-6 text-center">
-          <p className="text-gray-700 text-lg">Estudiante no encontrado o no tiene permisos</p>
+          <p className="text-gray-700 text-lg">Estudiante no encontrado</p>
           <div className="mt-6">
             <Link href="/resultados">
               <button className="bg-blue-600 hover:bg-blue-700 transition-colors text-white font-medium px-6 py-2 rounded-lg shadow">
@@ -52,7 +50,7 @@ export default function Resultados({ usuarios, resultados }: Props) {
           <table className="min-w-full text-sm text-left text-gray-700">
             <thead className="bg-blue-100 text-blue-800">
               <tr>
-                <th className="px-6 py-4 border-b">Título del Examen</th>
+                <th className="px-6 py-4 border-b">Idioma</th>
                 <th className="px-6 py-4 border-b">Calificación</th>
               </tr>
             </thead>
@@ -62,7 +60,7 @@ export default function Resultados({ usuarios, resultados }: Props) {
                   key={resultado.id}
                   className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}
                 >
-                  <td className="px-6 py-3 border-b">{resultado.titulo_examen}</td>
+                  <td className="px-6 py-3 border-b">{resultado.idioma}</td>
                   <td className="px-6 py-3 border-b">{resultado.calificacion}</td>
                 </tr>
               ))}

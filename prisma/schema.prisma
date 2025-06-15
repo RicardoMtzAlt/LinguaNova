@@ -4,28 +4,32 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("DATABASE_URL") // Asegúrate de definir esta variable en tu .env
 }
 
-model usuario {
-  id         Int         @id @default(autoincrement())
-  correo     String      @unique
+model usuarios {
+  id         Int          @id @default(autoincrement())
   nombre     String
-  rol        rol_enum
+  correo     String       @unique
   contrasena String
-  resultado  resultado[] // Relación 1:N con resultados
+
+  resultados resultados[]
+  historial  historial[]
 }
 
-model resultado {
-  id            Int      @id @default(autoincrement())
-  titulo_examen String
-  calificacion  Float
-  estudiante_id Int
-  usuario       usuario  @relation(fields: [estudiante_id], references: [id])
+model resultados {
+  id           Int       @id @default(autoincrement())
+  idioma       String
+  calificacion Float
+  usuarioid    Int
+  usuario      usuarios   @relation(fields: [usuarioid], references: [id])
 }
 
-enum rol_enum {
-  ESTUDIANTE
-  PROFESOR
-  ADMINISTRADOR
+model historial {
+  id         Int       @id @default(autoincrement())
+  busqueda   String
+  respuesta  String
+  fecha      DateTime  @default(now())
+  usuarioid  Int
+  usuario    usuarios   @relation(fields: [usuarioid], references: [id])
 }

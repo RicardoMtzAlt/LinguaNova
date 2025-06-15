@@ -32,24 +32,13 @@ export default function LoginPage() {
 
         const usuario = data.usuario;
 
-        if (usuario && usuario.id && usuario.rol) {
-          login({ id: usuario.id, rol: usuario.rol });
-
-          // Redirige según el rol
-          switch (usuario.rol) {
-            case 'ESTUDIANTE':
-              router.push('/dashboard');
-              break;
-            case 'PROFESOR':
-              router.push('/resultados');
-              break;
-            case 'ADMINISTRADOR':
-              router.push('/usuarios');
-              break;
-            default:
-              setMensaje('Rol no reconocido.');
-              setEsError(true);
-          }
+        if (usuario && usuario.id) {
+          login({
+            id: usuario.id,
+            nombre: '',
+            correo: ''
+          });
+          router.push('/dashboard');
         } else {
           setMensaje('Respuesta inesperada del servidor.');
           setEsError(true);
@@ -126,7 +115,7 @@ export default function LoginPage() {
                 <input
                   id="correo"
                   type="email"
-                  className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-gray-800 placeholder-gray-400" 
+                  className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-gray-800 placeholder-gray-400"
                   placeholder="correo@gmail.com"
                   value={correo}
                   onChange={(e) => setCorreo(e.target.value)}
@@ -184,6 +173,20 @@ export default function LoginPage() {
                   </>
                 ) : 'Iniciar sesión'}
               </button>
+            </div>
+
+            {/* Aquí agregamos el enlace para crear cuenta */}
+            <div className="pt-4 text-center">
+              <p className="text-sm text-gray-600">
+                ¿No tienes cuenta?{' '}
+                <button
+                  type="button"
+                  onClick={() => router.push('/usuarios/nuevo')}
+                  className="font-medium text-indigo-600 hover:text-indigo-500 underline"
+                >
+                  Crear cuenta
+                </button>
+              </p>
             </div>
           </div>
         </div>
