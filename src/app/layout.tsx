@@ -6,7 +6,7 @@ import { UserProvider } from './context/UserContext';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Proyecto de Cuestionarios',
+  title: 'simulador lenguajes',
   description: 'Generado con Next.js y Gemini',
 };
 
@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className={inter.className}>
-        <UserProvider> {/* Envuelve tu app con el provider */}
+        <UserProvider> 
           {children}
         </UserProvider>
       </body>

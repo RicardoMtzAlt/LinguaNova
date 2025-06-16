@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -34,38 +34,40 @@ export default function NuevoUsuarioPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <div className="bg-white shadow-lg rounded-lg p-10 w-full max-w-xl">
-        <h1 className="text-4xl font-bold mb-8 text-center text-blue-700">Crear Cuenta</h1>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800 px-4">
+      <div className="bg-gray-800 shadow-2xl rounded-xl p-10 w-full max-w-xl">
+        <h1 className="text-4xl font-bold mb-8 text-center text-indigo-200">
+          🌟 Crea tu cuenta en <span className="text-white">LinguaNova</span>
+        </h1>
 
         {error && (
-          <p className="text-red-600 bg-red-100 border border-red-300 rounded p-4 mb-5 text-lg font-semibold">
+          <p className="text-red-200 bg-red-900/30 border border-red-500 rounded p-4 mb-5 text-base font-medium text-center">
             {error}
           </p>
         )}
 
         {success && (
-          <p className="text-green-700 bg-green-100 border border-green-300 rounded p-4 mb-5 text-lg font-semibold text-center">
+          <p className="text-green-200 bg-green-800/30 border border-green-500 rounded p-4 mb-5 text-base font-medium text-center">
             Usuario creado exitosamente. Redirigiendo...
           </p>
         )}
 
         {!success && (
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-5">
             <input
               type="text"
-              placeholder="Nombre"
+              placeholder="Nombre completo"
               value={nombre}
               onChange={(e) => setNombre(e.target.value)}
-              className="border border-gray-300 p-4 w-full rounded text-2xl font-medium text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="bg-gray-900 border border-gray-700 p-4 w-full rounded-lg text-base text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               required
             />
             <input
               type="email"
-              placeholder="Correo"
+              placeholder="Correo electrónico"
               value={correo}
               onChange={(e) => setCorreo(e.target.value)}
-              className="border border-gray-300 p-4 w-full rounded text-2xl font-medium text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="bg-gray-900 border border-gray-700 p-4 w-full rounded-lg text-base text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               required
             />
             <input
@@ -73,12 +75,12 @@ export default function NuevoUsuarioPage() {
               placeholder="Contraseña"
               value={contrasena}
               onChange={(e) => setcontrasena(e.target.value)}
-              className="border border-gray-300 p-4 w-full rounded text-2xl font-medium text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="bg-gray-900 border border-gray-700 p-4 w-full rounded-lg text-base text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               required
             />
             <button
               type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 text-2xl rounded shadow-md transition duration-300"
+              className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-lg shadow-md transition duration-300"
             >
               Crear Cuenta
             </button>

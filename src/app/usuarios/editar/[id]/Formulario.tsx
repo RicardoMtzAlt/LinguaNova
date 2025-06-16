@@ -19,11 +19,7 @@ export default function FormularioUsuario({ usuario }: Props) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    const body = {
-      nombre,
-      correo,
-      contrasena,
-    }
+    const body = { nombre, correo, contrasena }
 
     const res = await fetch(`/api/usuarios/${usuario.id}`, {
       method: 'PUT',
@@ -34,10 +30,8 @@ export default function FormularioUsuario({ usuario }: Props) {
     if (res.ok) {
       setError('')
       setSuccess(true)
-
-      
       setTimeout(async () => {
-        await fetch('/api/logout') 
+        await fetch('/api/logout')
         router.push('/login')
       }, 2000)
     } else {
@@ -48,15 +42,15 @@ export default function FormularioUsuario({ usuario }: Props) {
   }
 
   return (
-    <div className="max-w-md mx-auto mt-6 bg-white p-6 rounded-lg shadow-md">
+    <div className="max-w-md mx-auto mt-6 bg-gray-800 p-6 rounded-lg shadow-xl">
       {success && (
-        <div className="bg-green-100 text-green-800 text-center p-4 rounded font-semibold text-lg">
+        <div className="bg-green-900/40 text-green-300 text-center p-4 rounded font-medium text-base">
           ✅ Usuario actualizado. Cerrando sesión para aplicar cambios...
         </div>
       )}
 
       {error && (
-        <div className="bg-red-100 text-red-800 text-center p-4 rounded font-semibold text-lg">
+        <div className="bg-red-800/40 text-red-300 text-center p-4 rounded font-medium text-base">
           ❌ {error}
         </div>
       )}
@@ -64,41 +58,41 @@ export default function FormularioUsuario({ usuario }: Props) {
       {!success && (
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block mb-1 font-medium text-gray-700 text-lg">Nombre</label>
+            <label className="block mb-1 text-indigo-200 font-medium text-sm">Nombre</label>
             <input
               type="text"
               value={nombre}
               onChange={e => setNombre(e.target.value)}
-              className="border border-gray-300 text-gray-500 p-3 w-full rounded shadow-sm text-lg focus:outline-blue-500"
+              className="bg-gray-900 border border-gray-700 text-gray-100 p-3 w-full rounded-md focus:ring-2 focus:ring-indigo-500 text-base placeholder-gray-500"
               required
             />
           </div>
 
           <div>
-            <label className="block mb-1 font-medium text-gray-700 text-lg">Correo</label>
+            <label className="block mb-1 text-indigo-200 font-medium text-sm">Correo</label>
             <input
               type="email"
               value={correo}
               onChange={e => setCorreo(e.target.value)}
-              className="border border-gray-300 text-gray-500 p-3 w-full rounded shadow-sm text-lg focus:outline-blue-500"
+              className="bg-gray-900 border border-gray-700 text-gray-100 p-3 w-full rounded-md focus:ring-2 focus:ring-indigo-500 text-base placeholder-gray-500"
               required
             />
           </div>
 
           <div>
-            <label className="block mb-1 font-medium text-gray-700 text-lg">Contraseña</label>
+            <label className="block mb-1 text-indigo-200 font-medium text-sm">Contraseña</label>
             <input
               type="password"
               value={contrasena}
               onChange={e => setcontrasena(e.target.value)}
               placeholder="(dejar vacío para no cambiar)"
-              className="border border-gray-300 text-gray-500 p-3 w-full rounded shadow-sm text-lg focus:outline-blue-500"
+              className="bg-gray-900 border border-gray-700 text-gray-100 p-3 w-full rounded-md focus:ring-2 focus:ring-indigo-500 text-base placeholder-gray-500"
             />
           </div>
 
           <button
             type="submit"
-            className="bg-blue-600 hover:bg-blue-700 text-white text-lg font-semibold px-4 py-3 rounded w-full transition"
+            className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-lg transition duration-300"
           >
             💾 Guardar Cambios
           </button>

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useUser } from '@/app/context/UserContext';
+import Link from 'next/link'; // Import Link for dashboard navigation
 
 type Evaluation = {
   isCorrect: boolean;
@@ -23,6 +24,11 @@ export default function QuizPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isFinished, setIsFinished] = useState(false);
 
+  // Decodifica el componente de la URL y asegura que sea una cadena singular
+  const decodedTopic = Array.isArray(topic) ? decodeURIComponent(topic[0]) : decodeURIComponent(topic || 'idioma');
+  // Capitaliza la primera letra y el resto en minúsculas para una visualización limpia
+  const topicName = decodedTopic.charAt(0).toUpperCase() + decodedTopic.slice(1).toLowerCase();
+
   useEffect(() => {
     if (!topic || !user) return;
 
@@ -32,7 +38,7 @@ export default function QuizPage() {
         const res = await fetch('/api/quiz/generate', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ topic }),
+          body: JSON.stringify({ topic: decodedTopic }), // Usa el topic decodificado para la API
         });
 
         if (!res.ok) throw new Error('Error al generar preguntas');
@@ -48,7 +54,7 @@ export default function QuizPage() {
     };
 
     fetchQuestions();
-  }, [topic, user, router]);
+  }, [topic, user, router, decodedTopic]); // Añade decodedTopic a las dependencias
 
   const handleAnswerSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -87,7 +93,7 @@ export default function QuizPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          topic: topic.toString(),
+          topic: decodedTopic, // Usa el topic decodificado para guardar
           score,
           userId: user.id,
         }),
@@ -110,10 +116,10 @@ export default function QuizPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800">
         <div className="text-center p-6 max-w-md w-full">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500 mx-auto mb-4" />
-          <p className="text-gray-700 text-lg font-medium">Generando tu cuestionario con IA...</p>
+          <p className="text-indigo-200 text-lg font-medium">Generando tu cuestionario con IA...</p>
         </div>
       </div>
     );
@@ -121,9 +127,14 @@ export default function QuizPage() {
 
   if (!questions.length) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center p-6 max-w-md w-full">
-          <p className="text-gray-700">No hay preguntas disponibles.</p>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800">
+        <div className="text-center p-6 max-w-md w-full bg-gray-800 shadow-xl rounded-2xl">
+          <p className="text-gray-400">No hay preguntas disponibles para este tema.</p>
+          <div className="mt-6">
+            <Link href="/dashboard" className="text-sm text-indigo-400 hover:underline">
+              Volver al Panel
+            </Link>
+          </div>
         </div>
       </div>
     );
@@ -131,23 +142,23 @@ export default function QuizPage() {
 
   if (isFinished) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-        <div className="w-full max-w-md bg-white rounded-xl shadow-lg overflow-hidden p-6 text-center">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800 p-4">
+        <div className="w-full max-w-md bg-gray-800 rounded-xl shadow-lg overflow-hidden p-6 text-center">
           <div className="mb-6">
-            <svg className="w-16 h-16 text-green-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-16 h-16 text-indigo-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">¡Cuestionario Terminado!</h2>
-          <p className="text-lg text-gray-600 mb-6">
-            Tu puntuación: <span className="font-bold text-indigo-600">{score} de {questions.length}</span>
+          <h2 className="text-2xl font-bold text-indigo-200 mb-2">¡Cuestionario Terminado!</h2>
+          <p className="text-lg text-gray-400 mb-6">
+            Tu puntuación: <span className="font-bold text-indigo-300">{score} de {questions.length}</span>
           </p>
-          <button
-            onClick={() => router.push('/dashboard')}
-            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition duration-200"
+          <Link
+            href="/dashboard"
+            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition duration-200 inline-block"
           >
-            Volver al inicio
-          </button>
+            Volver al Panel
+          </Link>
         </div>
       </div>
     );
@@ -156,20 +167,20 @@ export default function QuizPage() {
   const currentQuestion = questions[currentQuestionIndex];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4">
-      <div className="max-w-3xl mx-auto">
-        <div className="bg-white rounded-xl shadow-md overflow-hidden mb-6">
-          <div className="p-6 bg-indigo-600 text-white">
-            <h1 className="text-2xl font-bold mb-1">Cuestionario de: <span className="capitalize">{topic.toString()}</span></h1>
-            <p className="text-indigo-100">Pregunta {currentQuestionIndex + 1} de {questions.length} | Puntuación: {score}</p>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 py-8 px-4 flex items-center justify-center">
+      <div className="max-w-3xl w-full">
+        <div className="bg-gray-800 rounded-xl shadow-xl overflow-hidden mb-6">
+          <div className="p-6 bg-gray-700 text-indigo-200">
+            <h1 className="text-2xl font-bold mb-1">Cuestionario de: <span className="capitalize">{topicName}</span></h1>
+            <p className="text-gray-400">Pregunta {currentQuestionIndex + 1} de {questions.length} | Puntuación: {score}</p>
           </div>
 
           <div className="p-6">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">{currentQuestion}</h2>
+            <h2 className="text-xl font-semibold text-indigo-200 mb-4">{currentQuestion}</h2>
 
             <form onSubmit={handleAnswerSubmit}>
               <textarea
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-gray-800 placeholder-gray-400"
+                className="w-full px-4 py-3 border border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-gray-900 text-white placeholder-gray-500"
                 rows={4}
                 placeholder="Escribe tu respuesta aquí..."
                 value={userAnswer}
@@ -203,28 +214,28 @@ export default function QuizPage() {
 
             {evaluationResult && (
               <div className={`mt-4 p-4 rounded-lg border ${
-                evaluationResult.isCorrect ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'
+                evaluationResult.isCorrect ? 'bg-green-900 border-green-700' : 'bg-red-900 border-red-700'
               }`}>
                 <div className="flex items-start">
                   <div className="flex-shrink-0">
                     {evaluationResult.isCorrect ? (
-                      <svg className="h-5 w-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="h-5 w-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
                     ) : (
-                      <svg className="h-5 w-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="h-5 w-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                       </svg>
                     )}
                   </div>
                   <div className="ml-3">
                     <h3 className={`text-sm font-medium ${
-                      evaluationResult.isCorrect ? 'text-green-800' : 'text-red-800'
+                      evaluationResult.isCorrect ? 'text-green-300' : 'text-red-300'
                     }`}>
                       {evaluationResult.isCorrect ? '¡Respuesta Correcta!' : 'Respuesta Incorrecta'}
                     </h3>
                     <p className={`mt-2 text-sm ${
-                      evaluationResult.isCorrect ? 'text-green-700' : 'text-red-700'
+                      evaluationResult.isCorrect ? 'text-green-200' : 'text-red-200'
                     }`}>
                       {evaluationResult.explanation}
                     </p>

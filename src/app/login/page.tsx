@@ -62,18 +62,18 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-      <div className="w-full max-w-md bg-white rounded-xl shadow-lg overflow-hidden">
-        <div className="bg-indigo-300 p-6 text-center">
-          <h1 className="text-2xl font-bold text-white">Sistema de Simulación de Exámenes</h1>
-          <p className="text-indigo-100 mt-1">Ingresa tus credenciales para continuar</p>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800 p-4">
+      <div className="w-full max-w-md bg-gray-800 rounded-xl shadow-xl overflow-hidden">
+        <div className="bg-indigo-600 p-6 text-center">
+          <h1 className="text-2xl font-bold text-white">LinguaNova</h1>
+          <p className="text-indigo-100 mt-1 italic">“Tu viaje multilingüe comienza aquí”</p>
         </div>
 
         <div className="p-6 space-y-6">
           {mensaje && (
-            <div className={`p-3 rounded-lg ${esError ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'} flex items-center`}>
+            <div className={`p-3 rounded-lg ${esError ? 'bg-red-200 text-red-900' : 'bg-green-200 text-green-900'} flex items-center`}>
               <svg
-                className={`w-5 h-5 mr-2 ${esError ? 'text-red-500' : 'text-green-500'}`}
+                className={`w-5 h-5 mr-2 ${esError ? 'text-red-700' : 'text-green-700'}`}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -92,31 +92,15 @@ export default function LoginPage() {
 
           <div className="space-y-4">
             <div>
-              <label htmlFor="correo" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="correo" className="block text-sm font-medium text-gray-300 mb-1">
                 Correo electrónico
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <svg
-                    className="h-5 w-5 text-gray-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                    />
-                  </svg>
-                </div>
                 <input
                   id="correo"
                   type="email"
-                  className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-gray-800 placeholder-gray-400"
-                  placeholder="correo@gmail.com"
+                  className="block w-full pl-3 pr-3 py-2 bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-indigo-500 text-gray-200 placeholder-gray-500"
+                  placeholder="correo@email.com"
                   value={correo}
                   onChange={(e) => setCorreo(e.target.value)}
                   onKeyPress={handleKeyPress}
@@ -125,30 +109,14 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label htmlFor="contrasena" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="contrasena" className="block text-sm font-medium text-gray-300 mb-1">
                 Contraseña
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <svg
-                    className="h-5 w-5 text-gray-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                    />
-                  </svg>
-                </div>
                 <input
                   id="contrasena"
                   type="password"
-                  className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-gray-800 placeholder-gray-400"
+                  className="block w-full pl-3 pr-3 py-2 bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-indigo-500 text-gray-200 placeholder-gray-500"
                   placeholder="••••••••"
                   value={contrasena}
                   onChange={(e) => setContrasena(e.target.value)}
@@ -161,7 +129,7 @@ export default function LoginPage() {
               <button
                 onClick={handleLogin}
                 disabled={isLoading}
-                className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
+                className={`w-full flex justify-center py-2 px-4 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 transition duration-200 ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
               >
                 {isLoading ? (
                   <>
@@ -175,14 +143,13 @@ export default function LoginPage() {
               </button>
             </div>
 
-            {/* Aquí agregamos el enlace para crear cuenta */}
             <div className="pt-4 text-center">
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-gray-400">
                 ¿No tienes cuenta?{' '}
                 <button
                   type="button"
                   onClick={() => router.push('/usuarios/nuevo')}
-                  className="font-medium text-indigo-600 hover:text-indigo-500 underline"
+                  className="font-medium text-indigo-400 hover:text-indigo-300 underline"
                 >
                   Crear cuenta
                 </button>
@@ -191,10 +158,10 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <div className="px-6 py-4 bg-gray-50 text-center">
+        <div className="px-6 py-4 bg-gray-900 text-center border-t border-gray-700">
           <p className="text-xs text-gray-500">
             ¿Problemas para ingresar?{' '}
-            <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
+            <a href="#" className="font-medium text-indigo-400 hover:text-indigo-300 underline">
               Contacta al administrador
             </a>
           </p>
